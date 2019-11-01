@@ -8,15 +8,32 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button
 } from 'react-native';
 
 import { MonoText } from '../components/StyledText';
 import CreateReminder from '../notifications/local/CreateReminder'
+// import { StackNavigator } from 'react-navigation';
+// import LinkScreen from './LinksScreen'
 
-export default function HomeScreen() {
+export default function HomeScreen(props) {
+  console.log(props)
+  console.log('test ' )
+
+  _goToNewScreen = () => {
+    props.navigation.navigate('Links')
+  }
+
   return (
     <View style={styles.container}>
      <Text>Home Screen</Text>
+     <TouchableOpacity
+      onPress={this._goToNewScreen}
+     >
+       <Text>
+         Test
+       </Text>
+     </TouchableOpacity>
     </View>
   );
 }

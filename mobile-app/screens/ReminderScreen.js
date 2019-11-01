@@ -20,7 +20,9 @@ import CreateReminder from '../notifications/local/CreateReminder'
 import { LinearGradient } from 'expo-linear-gradient';
 
 
-export default function ReminderScreen() {
+
+
+export default function ReminderScreen(props) {
     const [test, setTest] = useState('')
     const [medName, setMedName] = useState('')
     const [notes, setNotes] = useState('')
@@ -29,6 +31,13 @@ export default function ReminderScreen() {
     const [dateEntered, setDateEntered] = useState(false)
 
     const [showDatePicker, setShowDatePicker] = useState(false)
+
+    _navigateHome =() => {
+        // reminderScreenState.reminderScreenProps.navigation.navigate('home')
+        props.navigation.navigate('Links')
+      
+      }
+
 
     _toggleDatePicker = () => {
         if(showDatePicker == false){
@@ -92,15 +101,18 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
 
                         >
                         
-                        <Text style={styles.textInputText}>
+                        {/* <Text style={styles.textInputText}> */}
                             {
                                 dateEntered?
-
-                               '' + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ''
+                                <Text>
+                               {'' + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ''}
+                               </Text>
                                :
-                               'Enter Expiration Date'
+                               <Text style={styles.textInputText}>
+                                    Enter Expiration Date
+                               </Text>
                             }
-                        </Text>
+                        {/* </Text> */}
                     </TouchableOpacity>
 
                     <TextInput
@@ -162,7 +174,7 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
            
                     </Modal>
 
-                    <CreateReminder medName={medName} expirationDate={expirationDate} />
+                    <CreateReminder medName={medName} expirationDate={expirationDate} additionalNotes={notes} ReminderScreenProps={props} />
 
                 </LinearGradient>
                 {/* <View style={{backgroundColor: 'red', width: '100%', height: '100%'}}><Text>Test</Text></View> */}
