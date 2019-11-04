@@ -29,7 +29,7 @@ _navigateHome =() => {
   // reminderScreenState.reminderScreenProps.navigation.navigate('home')
   // props.navigation.navigate('Links')
   // setShowReminderValidation(false)
-  reminderScreenState.ReminderScreenProps.navigation.navigate('Home')
+  reminderScreenState.ReminderScreenProps.navigation.navigate('Profile')
   // setNavigateAway(true)
   // setShowReminderValidation(false)
 

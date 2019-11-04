@@ -20,7 +20,7 @@ export default function HomeScreen(props) {
   console.log('test ' )
 
   _goToNewScreen = () => {
-    props.navigation.navigate('Reminders')
+    props.navigation.navigate('Profile')
   }
 
   return (

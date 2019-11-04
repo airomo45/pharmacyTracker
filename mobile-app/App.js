@@ -6,7 +6,9 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import ReminderScreen from './screens/ReminderScreen'
 
-import AppNavigator from './navigation/AppNavigator';
+import AppNavigation from './navigation/MainNavigator'
+
+// import AppNavigator from './navigation/AppNavigator';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -24,6 +26,8 @@ export default function App(props) {
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         {/* <AppNavigator /> */}
+        {/* <ReminderScreen/> */}
+        <AppNavigation/>
 
       </View>
     );

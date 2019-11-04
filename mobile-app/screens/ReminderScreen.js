@@ -18,7 +18,7 @@ import {
 import { MonoText } from '../components/StyledText';
 import CreateReminder from '../notifications/local/CreateReminder'
 import { LinearGradient } from 'expo-linear-gradient';
-
+import DatePicker from '../components/DatePicker'
 
 
 
@@ -30,6 +30,8 @@ export default function ReminderScreen(props) {
     const [expirationDate, setExpirationDate] = useState(new Date())
     const [dateEntered, setDateEntered] = useState(false)
     const [reminder, setReminder] = useState(false)
+
+
 
     const [showDatePicker, setShowDatePicker] = useState(false)
 
@@ -60,6 +62,10 @@ export default function ReminderScreen(props) {
         setReminder(true)
 
     }
+
+    // _datePickerCallBack = (dataFromDatePicker) => {
+        
+    // }
     
 
 
@@ -147,7 +153,8 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
                         null
 
                     }
-                    <Modal
+                    {/*  Date Picker Modal */}
+                    {/* <Modal
                         
                         animationType="slide"
                         transparent={true}
@@ -187,7 +194,9 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
                             </View>
              
            
-                    </Modal>
+                    </Modal> */}
+
+                    <DatePicker showComponent={showDatePicker} />
 
                     <CreateReminder medName={medName} expirationDate={expirationDate} additionalNotes={notes} ReminderScreenProps={props} sendReminder={reminder}/>
 
