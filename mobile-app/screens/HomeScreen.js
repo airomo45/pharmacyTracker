@@ -14,14 +14,13 @@ import {
 import { MonoText } from '../components/StyledText';
 import CreateReminder from '../notifications/local/CreateReminder'
 // import { StackNavigator } from 'react-navigation';
-// import LinkScreen from './LinksScreen'
 
 export default function HomeScreen(props) {
   console.log(props)
   console.log('test ' )
 
   _goToNewScreen = () => {
-    props.navigation.navigate('Links')
+    props.navigation.navigate('Reminders')
   }
 
   return (

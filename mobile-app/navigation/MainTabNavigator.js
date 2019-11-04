@@ -82,8 +82,7 @@ ReminderStack.navigationOptions = {
   ),
 };
 
-
-LinksStack.path = '';
+ReminderStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,

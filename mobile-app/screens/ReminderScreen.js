@@ -29,6 +29,7 @@ export default function ReminderScreen(props) {
     const [currentDate, setCurrentDate] = useState(new Date())
     const [expirationDate, setExpirationDate] = useState(new Date())
     const [dateEntered, setDateEntered] = useState(false)
+    const [reminder, setReminder] = useState(false)
 
     const [showDatePicker, setShowDatePicker] = useState(false)
 
@@ -52,6 +53,11 @@ export default function ReminderScreen(props) {
 
     _setDate = () => {
         setDateEntered(true)
+
+    }
+
+    _toggleReminder = () => {
+        setReminder(true)
 
     }
     
@@ -121,6 +127,15 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
                         onChangeText={text => setNotes(text)}
                         value={notes}
                     />
+                    <TouchableOpacity
+                        style={styles.buttonStyle}
+                        onPress={this._toggleReminder}
+
+                        >
+                        <Text style={styles.buttonText}>
+                            REMIND ME
+                        </Text>
+                    </TouchableOpacity>
                     
 
         
@@ -174,7 +189,7 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
            
                     </Modal>
 
-                    <CreateReminder medName={medName} expirationDate={expirationDate} additionalNotes={notes} ReminderScreenProps={props} />
+                    <CreateReminder medName={medName} expirationDate={expirationDate} additionalNotes={notes} ReminderScreenProps={props} sendReminder={reminder}/>
 
                 </LinearGradient>
                 {/* <View style={{backgroundColor: 'red', width: '100%', height: '100%'}}><Text>Test</Text></View> */}
@@ -185,7 +200,8 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
     }
 
 ReminderScreen.navigationOptions = {
-    header: null
+    header: null,
+    title: 'Reminders',
   };
 
 const styles = StyleSheet.create({
@@ -221,6 +237,25 @@ const styles = StyleSheet.create({
 textInputText:{
     justifyContent: 'center',
     color: '#ccc'
-}
+},
+buttonText:{
+    fontFamily: 'Arial',
+    fontSize: 14,
+    color: 'white',
+    fontWeight: 'bold',
+    
+  },
+  buttonStyle: {
+    marginTop:50,
+    height: 48,
+    width: '80%', 
+    backgroundColor:'#15649F69',
+    borderColor: '#15649F69',
+    // borderWidth: 2,
+    borderRadius: 24,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }, 
   
 });

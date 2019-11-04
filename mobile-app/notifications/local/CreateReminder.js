@@ -16,18 +16,26 @@ async function getiOSNotificationPermission() {
 const CreateReminder = (props) => {
   const [reminderScreenState, setreminderScreenState] = useState(props);
   const [ showReminderValidation, setShowReminderValidation] = useState(false);
-  // const [test, setTest] = useState('test');
+  const [ navigateAway, setNavigateAway] = useState(false);
 
   console.log('====================')
+  console.log(reminderScreenState.sendReminder)
   // console.log( reminderScreenState.ReminderScreenProps.navigation.navigate('Home') )
   
+
+
 
 _navigateHome =() => {
   // reminderScreenState.reminderScreenProps.navigation.navigate('home')
   // props.navigation.navigate('Links')
+  // setShowReminderValidation(false)
   reminderScreenState.ReminderScreenProps.navigation.navigate('Home')
-  setShowReminderValidation(false)
+  // setNavigateAway(true)
+  // setShowReminderValidation(false)
 
+}
+_hideModal = () => {
+  setShowReminderValidation(false)
 }
 
   _handleButtonPress = () => {
@@ -66,10 +74,21 @@ _navigateHome =() => {
 
 
   useEffect(() => {
+    // setNavigateAway(false)
     getiOSNotificationPermission();
     this.listenForNotifications();
     setreminderScreenState(props);
-  });
+
+    // if(navigateAway == false){
+    if(reminderScreenState.sendReminder == true){
+      this._handleButtonPress()
+    }
+
+  // }
+
+}
+  
+);
 
   console.log('Time: ' + Date.now())
 
@@ -84,7 +103,7 @@ _navigateHome =() => {
   console.log(">>>>" + reminderScreenState.medName)
     return (
       <View style={styles.container}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.buttonStyle}
           onPress={this._handleButtonPress}
 
@@ -92,7 +111,7 @@ _navigateHome =() => {
           <Text style={styles.buttonText}>
             REMIND ME
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
 
 
@@ -157,25 +176,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonText:{
-    fontFamily: 'Arial',
-    fontSize: 14,
-    color: 'white',
-    fontWeight: 'bold',
-    
-  },
-  buttonStyle: {
-    marginTop:50,
-    height: 48,
-    width: '80%', 
-    backgroundColor:'#15649F69',
-    borderColor: '#15649F69',
-    // borderWidth: 2,
-    borderRadius: 24,
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }, 
+
   reminderValidate:{
     backgroundColor: '#fff',
     width: '80%',
@@ -201,4 +202,23 @@ const styles = StyleSheet.create({
     marginTop: 20
 
   },
+  buttonText:{
+    fontFamily: 'Arial',
+    fontSize: 14,
+    color: 'white',
+    fontWeight: 'bold',
+    
+  },
+  buttonStyle: {
+    marginTop:50,
+    height: 48,
+    width: '80%', 
+    backgroundColor:'#15649F69',
+    borderColor: '#15649F69',
+    // borderWidth: 2,
+    borderRadius: 24,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }, 
 });
