@@ -19,6 +19,8 @@ import { MonoText } from '../components/StyledText';
 import CreateReminder from '../notifications/local/CreateReminder'
 import { LinearGradient } from 'expo-linear-gradient';
 
+import DatePicker from '../components/DatePicker'
+
 
 
 
@@ -31,7 +33,12 @@ export default function ReminderScreen(props) {
     const [dateEntered, setDateEntered] = useState(false)
     const [reminder, setReminder] = useState(false)
 
+
+
     const [showDatePicker, setShowDatePicker] = useState(false)
+
+    // const [showDatePicker2, setShowDatePicker2] = useState(false)
+
 
     _navigateHome =() => {
         // reminderScreenState.reminderScreenProps.navigation.navigate('home')
@@ -39,17 +46,6 @@ export default function ReminderScreen(props) {
       
       }
 
-
-    _toggleDatePicker = () => {
-        if(showDatePicker == false){
-            setShowDatePicker(true)
-
-        }
-        if(showDatePicker == true){
-            setShowDatePicker(false)
-
-        }
-    }
 
     _setDate = () => {
         setDateEntered(true)
@@ -62,14 +58,29 @@ export default function ReminderScreen(props) {
     }
     
 
+    // New component based datepicker
+    _toggleShowDatePicker = () => {
+        if(showDatePicker == false){
+            setShowDatePicker(true)
+        }
+        else{
+            setShowDatePicker(false)
+        }
+    }
 
-    console.log('>>>>>>>>>>>' + medName)
-    // setExpirationDate: newDate
-    console.log(expirationDate)
+
+    // console.log('>>>>>>>>>>>' + medName)
+    // // setExpirationDate: newDate
+    // console.log(expirationDate)
 //    console.log("testing date: " + (expirationDate.getMonth() + 1))
 
-console.log("current date: " + (currentDate.getMonth() + 1)+'/'+currentDate.getDate() +'/' + currentDate.getFullYear() + ' time: ' + currentDate.getHours() + ':' + currentDate.getMinutes() + '.......' + currentDate.getTime() )
-console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ' time: ' + expirationDate.getHours() + ':' + expirationDate.getMinutes() + '.......' + expirationDate.getTime() )
+console.log('Set Date: ' + dateEntered)
+
+// ==========================
+//  Test 
+// ===========================
+// console.log("current date: " + (currentDate.getMonth() + 1)+'/'+currentDate.getDate() +'/' + currentDate.getFullYear() + ' time: ' + currentDate.getHours() + ':' + currentDate.getMinutes() + '.......' + currentDate.getTime() )
+// console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ' time: ' + expirationDate.getHours() + ':' + expirationDate.getMinutes() + '.......' + expirationDate.getTime() )
 
     return (
             <View>
@@ -103,11 +114,9 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
 
                      <TouchableOpacity
                         style={[styles.textInput, {paddingTop: 14}]}
-                        onPress={this._toggleDatePicker}
+                        onPress={this._toggleShowDatePicker}
 
                         >
-                        
-                        {/* <Text style={styles.textInputText}> */}
                             {
                                 dateEntered?
                                 <Text>
@@ -118,7 +127,6 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
                                     Enter Expiration Date
                                </Text>
                             }
-                        {/* </Text> */}
                     </TouchableOpacity>
 
                     <TextInput
@@ -145,54 +153,22 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
                      
                         :
                         null
-
                     }
-                    <Modal
-                        
-                        animationType="slide"
-                        transparent={true}
-                        visible={showDatePicker}
-                        onRequestClose={() => {
-                            Alert.alert('Modal has been closed.');
-                    
-                        }}>
-                            <View style={{backgroundColor: '#fff', top: '70%'}}>
-                                <View>
-                                    <TouchableOpacity
-                                        onPress={this._toggleDatePicker}
-                                    >
-                                        <Text>Cancel</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            setExpirationDate(currentDate)
-                                            _setDate();
-                                            setShowDatePicker(false)
 
-                                        } }
-                                    >
-                                        <Text>Confirm</Text>
-                                    </TouchableOpacity>
-                                </View>
-
-
-                                <View style={{
-                                    // flex: 1,
-                                    width: '100%',
-                                    justifyContent: 'center'
-                                    }}>
-                                        <DatePickerIOS date={currentDate} onDateChange={setCurrentDate} />
-                        
-                                </View>
-                            </View>
-             
-           
-                    </Modal>
+                    <DatePicker 
+                        showDatePicker={showDatePicker} 
+                        currentDate={currentDate} 
+                        setCurrentDate={setCurrentDate}
+                        toggleDatePicker={_toggleShowDatePicker} 
+                        setDate={_setDate}
+                        setExpirationDate={setExpirationDate}
+                        setShowDatePicker={setShowDatePicker} 
+                    />
+            
 
                     <CreateReminder medName={medName} expirationDate={expirationDate} additionalNotes={notes} ReminderScreenProps={props} sendReminder={reminder}/>
 
                 </LinearGradient>
-                {/* <View style={{backgroundColor: 'red', width: '100%', height: '100%'}}><Text>Test</Text></View> */}
 
                 
         </View>
