@@ -30,14 +30,31 @@ export default function ReminderScreen(props) {
     const [notes, setNotes] = useState('')
     const [currentDate, setCurrentDate] = useState(new Date())
     const [expirationDate, setExpirationDate] = useState(new Date())
+
     const [dateEntered, setDateEntered] = useState(false)
     const [reminder, setReminder] = useState(false)
+
+    const dateRightNow = new Date()
 
 
 
     const [showDatePicker, setShowDatePicker] = useState(false)
 
-    // const [showDatePicker2, setShowDatePicker2] = useState(false)
+    const [isError, setError] = useState(false)
+
+    // ERROR HANDLING:
+    const [isMedicineEmpty, setIsMedicineEmpty] = useState(false)
+    const [isExpirationDateError, setExpirationDateError] = useState(false)
+
+    const [showErrorMessage, setShowErrorMessage] = useState(false)
+
+
+
+    const nameErrorString = '* Please enter the medicine name'
+    const dateErrorString = '* Please choose a later date'
+
+
+
 
 
     _navigateHome =() => {
@@ -68,16 +85,67 @@ export default function ReminderScreen(props) {
         }
     }
 
+    _showErrorMessage = () => {
+        setShowErrorMessage(true)
+    }
+
+    
+
+    
+    useEffect(() => {
+        if(medName == ''){
+            setIsMedicineEmpty(true)
+        }
+        else{
+            setIsMedicineEmpty(false)
+        }
+    
+        if(dateRightNow.getTime() >= currentDate.getTime()){
+            setExpirationDateError(true)
+        }
+        else{
+            setExpirationDateError(false)
+        }
+
+        if (isExpirationDateError == true || isMedicineEmpty == true){
+            setError(true)
+        }
+        else{
+            setError(false)
+        }
+    
+    });
+    
+
 
     // console.log('>>>>>>>>>>>' + medName)
     // // setExpirationDate: newDate
     // console.log(expirationDate)
 //    console.log("testing date: " + (expirationDate.getMonth() + 1))
 
-console.log('Set Date: ' + dateEntered)
+// ==========================
+//  Test error handling
+// ===========================
+console.log('>>>>>')
+console.log('medicine error: ' + isMedicineEmpty)
+console.log('date error: ' + isExpirationDateError)
+
 
 // ==========================
-//  Test 
+//  Test date comparison
+// ===========================
+// console.log('Set Date: ' + dateEntered)
+// console.log('-------------------------------------')
+// console.log('Test date: ' )
+// console.log('current date = ' + dateRightNow)
+// console.log('---------------------------------------------------')
+// console.log('Selected date = ' + currentDate)
+// console.log(" ")
+// console.log(dateRightNow.getTime() < currentDate.getTime())
+// console.log('-------------------------------------')
+
+// ==========================
+//  Test date
 // ===========================
 // console.log("current date: " + (currentDate.getMonth() + 1)+'/'+currentDate.getDate() +'/' + currentDate.getFullYear() + ' time: ' + currentDate.getHours() + ':' + currentDate.getMinutes() + '.......' + currentDate.getTime() )
 // console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ' time: ' + expirationDate.getHours() + ':' + expirationDate.getMinutes() + '.......' + expirationDate.getTime() )
@@ -105,29 +173,78 @@ console.log('Set Date: ' + dateEntered)
                         </Text>
                     </View>
                     <TextInput
-                        placeholder={'Enter Medicine Name'}
-                        style={styles.textInput}
+                      
+                        placeholder={
+                            (isMedicineEmpty && showErrorMessage)?
+                            nameErrorString
+                            :
+                            'Enter Medicine Name'
+                        }
+                        placeholderTextColor={
+                            (isMedicineEmpty && showErrorMessage)?
+                            'red'
+                            :
+                            null
+                        }
+                        style={
+                            (isMedicineEmpty && showErrorMessage)?
+                            [styles.textInput, styles.errorInput]
+                            :
+                            styles.textInput
+                        }
                         onChangeText={text => setMedName(text)}
                         value={medName}
                     />
-
-
+               
                      <TouchableOpacity
-                        style={[styles.textInput, {paddingTop: 14}]}
+                        style={
+                            (isMedicineEmpty && showErrorMessage)?
+                            [styles.textInput, styles.errorInput, {paddingTop: 14}]
+                            :
+                            [styles.textInput, {paddingTop: 14}]
+                        }
                         onPress={this._toggleShowDatePicker}
 
                         >
                             {
                                 dateEntered?
                                 <Text>
-                               {'' + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ''}
+                                    {
+                                        (isMedicineEmpty && showErrorMessage)?
+                                        <Text style={{color: 'red'}}>
+                                        { 
+                                           '' + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ''
+                                           + 
+                                           ' '
+                                           +
+                                           dateErrorString
+                                        }
+                                        </Text>
+                                        :
+                                        '' + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ''
+                                    
+                                    }
                                </Text>
                                :
-                               <Text style={styles.textInputText}>
-                                    Enter Expiration Date
-                               </Text>
+                               (
+                                    (isMedicineEmpty && showErrorMessage)?
+
+                                    <Text style={
+                                            [styles.textInputText, {color: 'red'}]
+                                        }>
+                                            {
+                                                dateErrorString
+                                            }
+                                    </Text>
+                                    :
+                                    <Text style={styles.textInputText}>
+                                        Enter Expiration Date
+                                    </Text>
+
+                               )
                             }
                     </TouchableOpacity>
+               
 
                     <TextInput
                         placeholder={'Additional Notes'}
@@ -135,9 +252,18 @@ console.log('Set Date: ' + dateEntered)
                         onChangeText={text => setNotes(text)}
                         value={notes}
                     />
+
+
+                  
+
                     <TouchableOpacity
                         style={styles.buttonStyle}
-                        onPress={this._toggleReminder}
+                        onPress={
+                            isError ?
+                            this._showErrorMessage
+                            :
+                            this._toggleReminder
+                        }
 
                         >
                         <Text style={styles.buttonText}>
@@ -168,6 +294,8 @@ console.log('Set Date: ' + dateEntered)
 
                     <CreateReminder medName={medName} expirationDate={expirationDate} additionalNotes={notes} ReminderScreenProps={props} sendReminder={reminder}/>
 
+
+
                 </LinearGradient>
 
                 
@@ -190,7 +318,7 @@ const styles = StyleSheet.create({
 
   },
   title:{
-    fontFamily: 'Arial Hebrew',
+    // fontFamily: 'Arial Hebrew',
     fontSize: 40,
     color: 'white',
     fontWeight: 'bold',
@@ -215,7 +343,7 @@ textInputText:{
     color: '#ccc'
 },
 buttonText:{
-    fontFamily: 'Arial',
+    // fontFamily: 'Arial',
     fontSize: 14,
     color: 'white',
     fontWeight: 'bold',
@@ -233,5 +361,9 @@ buttonText:{
     alignItems: 'center',
     justifyContent: 'center',
   }, 
+  errorInput: {
+    borderColor: '#FA8080',
+    borderWidth: 1
+  },
   
 });

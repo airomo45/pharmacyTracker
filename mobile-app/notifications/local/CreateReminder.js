@@ -103,19 +103,7 @@ _hideModal = () => {
   console.log(">>>>" + reminderScreenState.medName)
     return (
       <View style={styles.container}>
-        {/* <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={this._handleButtonPress}
-
-        >
-          <Text style={styles.buttonText}>
-            REMIND ME
-          </Text>
-        </TouchableOpacity> */}
-
-
-
-
+ 
         <Modal
             animationType="none"
             transparent={true}
