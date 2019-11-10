@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button, Alert, Platform, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Button, Alert, Platform, TouchableOpacity, Modal } from 'react-native';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import {Notifications} from 'expo';
@@ -14,15 +14,33 @@ async function getiOSNotificationPermission() {
 }
 
 const CreateReminder = (props) => {
-  const [profileState, setProfileState] = useState(props);
-  // const [test, setTest] = useState('test');
+  const [reminderScreenState, setreminderScreenState] = useState(props);
+  const [ showReminderValidation, setShowReminderValidation] = useState(false);
+  const [ navigateAway, setNavigateAway] = useState(false);
 
+  console.log('====================')
+  console.log(reminderScreenState.sendReminder)
+  // console.log( reminderScreenState.ReminderScreenProps.navigation.navigate('Home') )
   
 
 
+
+_navigateHome =() => {
+  // reminderScreenState.reminderScreenProps.navigation.navigate('home')
+  // props.navigation.navigate('Links')
+  // setShowReminderValidation(false)
+  reminderScreenState.ReminderScreenProps.navigation.navigate('Home')
+  // setNavigateAway(true)
+  // setShowReminderValidation(false)
+
+}
+_hideModal = () => {
+  setShowReminderValidation(false)
+}
+
   _handleButtonPress = () => {
     const localnotification = {
-      title: profileState.medName + ' is about to expire!',
+      title: reminderScreenState.medName + ' is about to expire!',
       body: 'Your medicine is about to expire!',
       badge: 1,
       android: {
@@ -35,14 +53,15 @@ const CreateReminder = (props) => {
     let sendAfterFiveSeconds = Date.now();
     sendAfterFiveSeconds += 5000;
     console.log(sendAfterFiveSeconds)
-    // console.log('>>>' + Math.floor(profileState.expirationDate.getTime()) )
-    let scheduleReminder = profileState.expirationDate.getTime();
+    // console.log('>>>' + Math.floor(reminderScreenState.expirationDate.getTime()) )
+    let scheduleReminder = reminderScreenState.expirationDate.getTime();
     // let scheduleReminder = (new Date()).getTime() + 10000
     const schedulingOptions = { time:  scheduleReminder};
     Notifications.scheduleLocalNotificationAsync(
       localnotification,
       schedulingOptions
     );
+    setShowReminderValidation(true)
   };
 
   listenForNotifications = () => {
@@ -55,33 +74,82 @@ const CreateReminder = (props) => {
 
 
   useEffect(() => {
+    // setNavigateAway(false)
     getiOSNotificationPermission();
     this.listenForNotifications();
-    setProfileState(props);
-  });
+    setreminderScreenState(props);
+
+    // if(navigateAway == false){
+    if(reminderScreenState.sendReminder == true){
+      this._handleButtonPress()
+    }
+
+  // }
+
+}
+  
+);
 
   console.log('Time: ' + Date.now())
 
   var date = new Date()
 
   var date = Math.floor(new Date().getTime()) 
-   console.log('Time: ' + profileState.expirationDate.getTime())
+   console.log('Time: ' + reminderScreenState.expirationDate.getTime())
 
 
-  //  console.log("testing date: " + (profileState.expirationDate.getMonth() + 1)+'/'+profileState.expirationDate.getDate() +'/' + profileState.expirationDate.getFullYear() + ' time: ' + profileState.expirationDate.getHours() + ':' + profileState.expirationDate.getMinutes() + '.......' + profileState.expirationDate.getTime() )
+  //  console.log("testing date: " + (reminderScreenState.expirationDate.getMonth() + 1)+'/'+reminderScreenState.expirationDate.getDate() +'/' + reminderScreenState.expirationDate.getFullYear() + ' time: ' + reminderScreenState.expirationDate.getHours() + ':' + reminderScreenState.expirationDate.getMinutes() + '.......' + reminderScreenState.expirationDate.getTime() )
 
-  console.log(">>>>" + profileState.medName)
+  console.log(">>>>" + reminderScreenState.medName)
     return (
       <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.buttonStyle}
-          onPress={this._handleButtonPress}
+ 
+        <Modal
+            animationType="none"
+            transparent={true}
+            visible={showReminderValidation}
+            onRequestClose={() => {
+                Alert.alert('Modal has been closed.');
+        
+            }}>
+              <View style={{justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0, .7)', height: '100%'}}>
+                <View style={styles.reminderValidate}>
+                  <Text style={styles.reminderValidateTitle}>Reminder Created</Text>
+                  <Text style={styles.reminderValidateText}>Your medicine, 
+                  {' '}
+                  <Text style={[styles.reminderValidateText], {fontWeight: 'bold'}}>
+                    {reminderScreenState.medName} 
+                  </Text>
+                  {' '}
+                  will expire on 
+                  {' '}
+                  <Text style={[styles.reminderValidateText], {fontWeight: 'bold'}}>
+                    {(reminderScreenState.expirationDate.getMonth() + 1) + '/' + reminderScreenState.expirationDate.getDate() + '/' + reminderScreenState.expirationDate.getFullYear()} 
+                  </Text>
+                  {' '}
+                  at 
+                  {' '}
+                    <Text style={[styles.reminderValidateText], {fontWeight: 'bold'}}>
+                      {reminderScreenState.expirationDate.toLocaleString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' })}
+                    </Text>
+                  </Text>
 
-        >
-          <Text style={styles.buttonText}>
-            REMIND ME
-          </Text>
-        </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.buttonStyle, {backgroundColor: '#4A96B5'}]}
+                    onPress={this._navigateHome}
+                  >
+                    <Text style={styles.buttonText}>
+                      Continue
+                    </Text>
+                  </TouchableOpacity>
+
+
+                </View>
+              </View>
+
+
+
+          </Modal>
 
       </View>
     );
@@ -95,6 +163,32 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+
+  reminderValidate:{
+    backgroundColor: '#fff',
+    width: '80%',
+    height: '30%',
+    alignItems: 'center',
+    padding: 25,
+    borderRadius: 20,
+    
+  },
+  reminderValidateTitle:{
+    fontFamily: 'Arial Hebrew',
+    color: '#4A96B5',
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 20
+
+  },
+  reminderValidateText:{
+    fontFamily: 'Arial',
+    color: '#4A96B5',
+    fontSize: 16,
+    // fontWeight: 'bold',
+    marginTop: 20
+
   },
   buttonText:{
     fontFamily: 'Arial',
@@ -114,5 +208,5 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  }, 
 });

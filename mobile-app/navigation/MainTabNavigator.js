@@ -71,10 +71,10 @@ SettingsStack.path = '';
 const ReminderStack = createStackNavigator(
   {
     Reminder: ReminderScreen,
+    // CreateReminderScreen: CreateReminder,
   },
   config
 );
-
 ReminderStack.navigationOptions = {
   tabBarLabel: 'Reminders',
   tabBarIcon: ({ focused }) => (
@@ -82,13 +82,14 @@ ReminderStack.navigationOptions = {
   ),
 };
 
-LinksStack.path = '';
+ReminderStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
   ReminderStack
+
 });
 
 tabNavigator.path = '';

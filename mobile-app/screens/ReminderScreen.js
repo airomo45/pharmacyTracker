@@ -19,42 +19,136 @@ import { MonoText } from '../components/StyledText';
 import CreateReminder from '../notifications/local/CreateReminder'
 import { LinearGradient } from 'expo-linear-gradient';
 
+import DatePicker from '../components/DatePicker'
 
-export default function ReminderScreen() {
+
+
+
+export default function ReminderScreen(props) {
     const [test, setTest] = useState('')
     const [medName, setMedName] = useState('')
     const [notes, setNotes] = useState('')
     const [currentDate, setCurrentDate] = useState(new Date())
     const [expirationDate, setExpirationDate] = useState(new Date())
+
     const [dateEntered, setDateEntered] = useState(false)
+    const [reminder, setReminder] = useState(false)
+
+    const dateRightNow = new Date()
+
+
 
     const [showDatePicker, setShowDatePicker] = useState(false)
 
-    _toggleDatePicker = () => {
-        if(showDatePicker == false){
-            setShowDatePicker(true)
+    const [isError, setError] = useState(false)
 
-        }
-        if(showDatePicker == true){
-            setShowDatePicker(false)
+    // ERROR HANDLING:
+    const [isMedicineEmpty, setIsMedicineEmpty] = useState(false)
+    const [isExpirationDateError, setExpirationDateError] = useState(false)
 
-        }
-    }
+    const [showErrorMessage, setShowErrorMessage] = useState(false)
+
+
+
+    const nameErrorString = '* Please enter the medicine name'
+    const dateErrorString = '* Please choose a later date'
+
+
+
+
+
+    _navigateHome =() => {
+        // reminderScreenState.reminderScreenProps.navigation.navigate('home')
+        props.navigation.navigate('Links')
+      
+      }
+
 
     _setDate = () => {
         setDateEntered(true)
 
     }
+
+    _toggleReminder = () => {
+        setReminder(true)
+
+    }
+    
+
+    // New component based datepicker
+    _toggleShowDatePicker = () => {
+        if(showDatePicker == false){
+            setShowDatePicker(true)
+        }
+        else{
+            setShowDatePicker(false)
+        }
+    }
+
+    _showErrorMessage = () => {
+        setShowErrorMessage(true)
+    }
+
+    
+
+    
+    useEffect(() => {
+        if(medName == ''){
+            setIsMedicineEmpty(true)
+        }
+        else{
+            setIsMedicineEmpty(false)
+        }
+    
+        if(dateRightNow.getTime() >= currentDate.getTime()){
+            setExpirationDateError(true)
+        }
+        else{
+            setExpirationDateError(false)
+        }
+
+        if (isExpirationDateError == true || isMedicineEmpty == true){
+            setError(true)
+        }
+        else{
+            setError(false)
+        }
+    
+    });
     
 
 
-    console.log('>>>>>>>>>>>' + medName)
-    // setExpirationDate: newDate
-    console.log(expirationDate)
+    // console.log('>>>>>>>>>>>' + medName)
+    // // setExpirationDate: newDate
+    // console.log(expirationDate)
 //    console.log("testing date: " + (expirationDate.getMonth() + 1))
 
-console.log("current date: " + (currentDate.getMonth() + 1)+'/'+currentDate.getDate() +'/' + currentDate.getFullYear() + ' time: ' + currentDate.getHours() + ':' + currentDate.getMinutes() + '.......' + currentDate.getTime() )
-console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ' time: ' + expirationDate.getHours() + ':' + expirationDate.getMinutes() + '.......' + expirationDate.getTime() )
+// ==========================
+//  Test error handling
+// ===========================
+console.log('>>>>>')
+console.log('medicine error: ' + isMedicineEmpty)
+console.log('date error: ' + isExpirationDateError)
+
+
+// ==========================
+//  Test date comparison
+// ===========================
+// console.log('Set Date: ' + dateEntered)
+// console.log('-------------------------------------')
+// console.log('Test date: ' )
+// console.log('current date = ' + dateRightNow)
+// console.log('---------------------------------------------------')
+// console.log('Selected date = ' + currentDate)
+// console.log(" ")
+// console.log(dateRightNow.getTime() < currentDate.getTime())
+// console.log('-------------------------------------')
+
+// ==========================
+//  Test date
+// ===========================
+// console.log("current date: " + (currentDate.getMonth() + 1)+'/'+currentDate.getDate() +'/' + currentDate.getFullYear() + ' time: ' + currentDate.getHours() + ':' + currentDate.getMinutes() + '.......' + currentDate.getTime() )
+// console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ' time: ' + expirationDate.getHours() + ':' + expirationDate.getMinutes() + '.......' + expirationDate.getTime() )
 
     return (
             <View>
@@ -79,29 +173,78 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
                         </Text>
                     </View>
                     <TextInput
-                        placeholder={'Enter Medicine Name'}
-                        style={styles.textInput}
+                      
+                        placeholder={
+                            (isMedicineEmpty && showErrorMessage)?
+                            nameErrorString
+                            :
+                            'Enter Medicine Name'
+                        }
+                        placeholderTextColor={
+                            (isMedicineEmpty && showErrorMessage)?
+                            'red'
+                            :
+                            null
+                        }
+                        style={
+                            (isMedicineEmpty && showErrorMessage)?
+                            [styles.textInput, styles.errorInput]
+                            :
+                            styles.textInput
+                        }
                         onChangeText={text => setMedName(text)}
                         value={medName}
                     />
-
-
+               
                      <TouchableOpacity
-                        style={[styles.textInput, {paddingTop: 14}]}
-                        onPress={this._toggleDatePicker}
+                        style={
+                            (isMedicineEmpty && showErrorMessage)?
+                            [styles.textInput, styles.errorInput, {paddingTop: 14}]
+                            :
+                            [styles.textInput, {paddingTop: 14}]
+                        }
+                        onPress={this._toggleShowDatePicker}
 
                         >
-                        
-                        <Text style={styles.textInputText}>
                             {
                                 dateEntered?
-
-                               '' + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ''
+                                <Text>
+                                    {
+                                        (isMedicineEmpty && showErrorMessage)?
+                                        <Text style={{color: 'red'}}>
+                                        { 
+                                           '' + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ''
+                                           + 
+                                           ' '
+                                           +
+                                           dateErrorString
+                                        }
+                                        </Text>
+                                        :
+                                        '' + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ''
+                                    
+                                    }
+                               </Text>
                                :
-                               'Enter Expiration Date'
+                               (
+                                    (isMedicineEmpty && showErrorMessage)?
+
+                                    <Text style={
+                                            [styles.textInputText, {color: 'red'}]
+                                        }>
+                                            {
+                                                dateErrorString
+                                            }
+                                    </Text>
+                                    :
+                                    <Text style={styles.textInputText}>
+                                        Enter Expiration Date
+                                    </Text>
+
+                               )
                             }
-                        </Text>
                     </TouchableOpacity>
+               
 
                     <TextInput
                         placeholder={'Additional Notes'}
@@ -109,6 +252,24 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
                         onChangeText={text => setNotes(text)}
                         value={notes}
                     />
+
+
+                  
+
+                    <TouchableOpacity
+                        style={styles.buttonStyle}
+                        onPress={
+                            isError ?
+                            this._showErrorMessage
+                            :
+                            this._toggleReminder
+                        }
+
+                        >
+                        <Text style={styles.buttonText}>
+                            REMIND ME
+                        </Text>
+                    </TouchableOpacity>
                     
 
         
@@ -118,54 +279,24 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
                      
                         :
                         null
-
                     }
-                    <Modal
-                        
-                        animationType="slide"
-                        transparent={true}
-                        visible={showDatePicker}
-                        onRequestClose={() => {
-                            Alert.alert('Modal has been closed.');
-                    
-                        }}>
-                            <View style={{backgroundColor: '#fff', top: '70%'}}>
-                                <View>
-                                    <TouchableOpacity
-                                        onPress={this._toggleDatePicker}
-                                    >
-                                        <Text>Cancel</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            setExpirationDate(currentDate)
-                                            _setDate();
-                                            setShowDatePicker(false)
 
-                                        } }
-                                    >
-                                        <Text>Confirm</Text>
-                                    </TouchableOpacity>
-                                </View>
+                    <DatePicker 
+                        showDatePicker={showDatePicker} 
+                        currentDate={currentDate} 
+                        setCurrentDate={setCurrentDate}
+                        toggleDatePicker={_toggleShowDatePicker} 
+                        setDate={_setDate}
+                        setExpirationDate={setExpirationDate}
+                        setShowDatePicker={setShowDatePicker} 
+                    />
+            
+
+                    <CreateReminder medName={medName} expirationDate={expirationDate} additionalNotes={notes} ReminderScreenProps={props} sendReminder={reminder}/>
 
 
-                                <View style={{
-                                    // flex: 1,
-                                    width: '100%',
-                                    justifyContent: 'center'
-                                    }}>
-                                        <DatePickerIOS date={currentDate} onDateChange={setCurrentDate} />
-                        
-                                </View>
-                            </View>
-             
-           
-                    </Modal>
-
-                    <CreateReminder medName={medName} expirationDate={expirationDate} />
 
                 </LinearGradient>
-                {/* <View style={{backgroundColor: 'red', width: '100%', height: '100%'}}><Text>Test</Text></View> */}
 
                 
         </View>
@@ -173,7 +304,8 @@ console.log("current date: " + (expirationDate.getMonth() + 1)+'/'+expirationDat
     }
 
 ReminderScreen.navigationOptions = {
-    header: null
+    header: null,
+    title: 'Reminders',
   };
 
 const styles = StyleSheet.create({
@@ -186,7 +318,7 @@ const styles = StyleSheet.create({
 
   },
   title:{
-    fontFamily: 'Arial Hebrew',
+    // fontFamily: 'Arial Hebrew',
     fontSize: 40,
     color: 'white',
     fontWeight: 'bold',
@@ -209,6 +341,29 @@ const styles = StyleSheet.create({
 textInputText:{
     justifyContent: 'center',
     color: '#ccc'
-}
+},
+buttonText:{
+    // fontFamily: 'Arial',
+    fontSize: 14,
+    color: 'white',
+    fontWeight: 'bold',
+    
+  },
+  buttonStyle: {
+    marginTop:50,
+    height: 48,
+    width: '80%', 
+    backgroundColor:'#15649F69',
+    borderColor: '#15649F69',
+    // borderWidth: 2,
+    borderRadius: 24,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }, 
+  errorInput: {
+    borderColor: '#FA8080',
+    borderWidth: 1
+  },
   
 });
