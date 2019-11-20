@@ -25,18 +25,18 @@ const CreateReminder = (props) => {
 
 
 
-_navigateHome =() => {
-  // reminderScreenState.reminderScreenProps.navigation.navigate('home')
-  // props.navigation.navigate('Links')
-  // setShowReminderValidation(false)
-  reminderScreenState.ReminderScreenProps.navigation.navigate('Home')
-  // setNavigateAway(true)
-  // setShowReminderValidation(false)
+// _navigateHome =() => {
+//   // reminderScreenState.reminderScreenProps.navigation.navigate('home')
+//   // props.navigation.navigate('Links')
+//   // setShowReminderValidation(false)
+//   reminderScreenState.ReminderScreenProps.navigation.navigate('Home')
+//   // setNavigateAway(true)
+//   // setShowReminderValidation(false)
 
-}
-_hideModal = () => {
-  setShowReminderValidation(false)
-}
+// }
+// _hideModal = () => {
+//   setShowReminderValidation(false)
+// }
 
   _handleButtonPress = () => {
     const localnotification = {
@@ -61,7 +61,9 @@ _hideModal = () => {
       localnotification,
       schedulingOptions
     );
-    setShowReminderValidation(true)
+    // setShowReminderValidation(true)
+    // reminderScreenState.setMedName('')
+    // reminderScreenState.setNotes('')
   };
 
   listenForNotifications = () => {
@@ -101,58 +103,59 @@ _hideModal = () => {
   //  console.log("testing date: " + (reminderScreenState.expirationDate.getMonth() + 1)+'/'+reminderScreenState.expirationDate.getDate() +'/' + reminderScreenState.expirationDate.getFullYear() + ' time: ' + reminderScreenState.expirationDate.getHours() + ':' + reminderScreenState.expirationDate.getMinutes() + '.......' + reminderScreenState.expirationDate.getTime() )
 
   console.log(">>>>" + reminderScreenState.medName)
-    return (
-      <View style={styles.container}>
+  return(null)
+    // return (
+    //   <View style={styles.container}>
  
-        <Modal
-            animationType="none"
-            transparent={true}
-            visible={showReminderValidation}
-            onRequestClose={() => {
-                Alert.alert('Modal has been closed.');
+    //     {/* <Modal
+    //         animationType="none"
+    //         transparent={true}
+    //         visible={showReminderValidation}
+    //         onRequestClose={() => {
+    //             Alert.alert('Modal has been closed.');
         
-            }}>
-              <View style={{justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0, .7)', height: '100%'}}>
-                <View style={styles.reminderValidate}>
-                  <Text style={styles.reminderValidateTitle}>Reminder Created</Text>
-                  <Text style={styles.reminderValidateText}>Your medicine, 
-                  {' '}
-                  <Text style={[styles.reminderValidateText], {fontWeight: 'bold'}}>
-                    {reminderScreenState.medName} 
-                  </Text>
-                  {' '}
-                  will expire on 
-                  {' '}
-                  <Text style={[styles.reminderValidateText], {fontWeight: 'bold'}}>
-                    {(reminderScreenState.expirationDate.getMonth() + 1) + '/' + reminderScreenState.expirationDate.getDate() + '/' + reminderScreenState.expirationDate.getFullYear()} 
-                  </Text>
-                  {' '}
-                  at 
-                  {' '}
-                    <Text style={[styles.reminderValidateText], {fontWeight: 'bold'}}>
-                      {reminderScreenState.expirationDate.toLocaleString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' })}
-                    </Text>
-                  </Text>
+    //         }}>
+    //           <View style={{justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0, .7)', height: '100%'}}>
+    //             <View style={styles.reminderValidate}>
+    //               <Text style={styles.reminderValidateTitle}>Reminder Created</Text>
+    //               <Text style={styles.reminderValidateText}>Your medicine, 
+    //               {' '}
+    //               <Text style={[styles.reminderValidateText], {fontWeight: 'bold'}}>
+    //                 {reminderScreenState.medName} 
+    //               </Text>
+    //               {' '}
+    //               will expire on 
+    //               {' '}
+    //               <Text style={[styles.reminderValidateText], {fontWeight: 'bold'}}>
+    //                 {(reminderScreenState.expirationDate.getMonth() + 1) + '/' + reminderScreenState.expirationDate.getDate() + '/' + reminderScreenState.expirationDate.getFullYear()} 
+    //               </Text>
+    //               {' '}
+    //               at 
+    //               {' '}
+    //                 <Text style={[styles.reminderValidateText], {fontWeight: 'bold'}}>
+    //                   {reminderScreenState.expirationDate.toLocaleString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' })}
+    //                 </Text>
+    //               </Text>
 
-                  <TouchableOpacity
-                    style={[styles.buttonStyle, {backgroundColor: '#4A96B5'}]}
-                    onPress={this._navigateHome}
-                  >
-                    <Text style={styles.buttonText}>
-                      Continue
-                    </Text>
-                  </TouchableOpacity>
-
-
-                </View>
-              </View>
+    //               <TouchableOpacity
+    //                 style={[styles.buttonStyle, {backgroundColor: '#4A96B5'}]}
+    //                 onPress={this._navigateHome}
+    //               >
+    //                 <Text style={styles.buttonText}>
+    //                   Continue
+    //                 </Text>
+    //               </TouchableOpacity>
 
 
+    //             </View>
+    //           </View>
 
-          </Modal>
 
-      </View>
-    );
+
+    //       </Modal> */}
+
+    //   </View>
+    // );
   }
 
   export default CreateReminder;

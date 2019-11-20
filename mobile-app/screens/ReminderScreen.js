@@ -71,6 +71,8 @@ export default function ReminderScreen(props) {
 
     _toggleReminder = () => {
         setReminder(true)
+ 
+        
 
     }
     
@@ -157,7 +159,7 @@ console.log('date error: ' + isExpirationDateError)
 
                     colors={['#0F5F9D', '#9EE3D9']}
                     >
-                        
+                                        
 
                     <View style={{
                         // alignItems: 'right', 
@@ -198,7 +200,7 @@ console.log('date error: ' + isExpirationDateError)
                
                      <TouchableOpacity
                         style={
-                            (isMedicineEmpty && showErrorMessage)?
+                            (isExpirationDateError && showErrorMessage)?
                             [styles.textInput, styles.errorInput, {paddingTop: 14}]
                             :
                             [styles.textInput, {paddingTop: 14}]
@@ -210,7 +212,7 @@ console.log('date error: ' + isExpirationDateError)
                                 dateEntered?
                                 <Text>
                                     {
-                                        (isMedicineEmpty && showErrorMessage)?
+                                        (isExpirationDateError && showErrorMessage)?
                                         <Text style={{color: 'red'}}>
                                         { 
                                            '' + (expirationDate.getMonth() + 1)+'/'+expirationDate.getDate() +'/' + expirationDate.getFullYear() + ''
@@ -227,7 +229,7 @@ console.log('date error: ' + isExpirationDateError)
                                </Text>
                                :
                                (
-                                    (isMedicineEmpty && showErrorMessage)?
+                                    (isExpirationDateError && showErrorMessage)?
 
                                     <Text style={
                                             [styles.textInputText, {color: 'red'}]
@@ -292,7 +294,7 @@ console.log('date error: ' + isExpirationDateError)
                     />
             
 
-                    <CreateReminder medName={medName} expirationDate={expirationDate} additionalNotes={notes} ReminderScreenProps={props} sendReminder={reminder}/>
+                    <CreateReminder medName={medName} expirationDate={expirationDate} additionalNotes={notes} ReminderScreenProps={props} sendReminder={reminder} setMedName={setMedName} setNotes={setNotes} />
 
 
 
