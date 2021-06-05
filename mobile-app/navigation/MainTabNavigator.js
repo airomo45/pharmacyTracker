@@ -7,6 +7,8 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import ReminderScreen from '../screens/ReminderScreen';
+import TestScreen from '../screens/TestScreen';
+import ToDoScreen from '../screens/ToDoScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -15,7 +17,9 @@ const config = Platform.select({
 
 const HomeStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    // Home: HomeScreen,
+    // Home: TestScreen
+    Home: ToDoScreen
   },
   config
 );
